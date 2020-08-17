@@ -10,7 +10,7 @@ const {
 const app = express();
 app.set('view engine', 'ejs');
 
-mongoose.connect('mongodb://localhost:27017/userInfoDB', {
+mongoose.connect('mongodb+srv://reza:105796@cluster0.ywkip.mongodb.net/userInfoDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -96,11 +96,6 @@ function saveNewUserInfo(req) {
     password: userPass
   });
   newUser.save();
-}
-
-function checkUserValidity(req,res) {
-
-
 }
 
 
