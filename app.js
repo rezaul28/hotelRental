@@ -9,11 +9,23 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+var fs = require('fs');
+var path = require('path');
+var multer = require('multer');
 
 const app = express();
 
 app.use(express.static("public"));
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+}); 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -32,6 +44,10 @@ mongoose.connect('mongodb+srv://reza:105796@cluster0.ywkip.mongodb.net/userInfoD
   //useUnifiedTopology: true
 });
 mongoose.set("useCreateIndex", true);
+var upload = multer({
+  storage: storage
+});
+var imgModel = require('./model');
 
 const userSchema = new mongoose.Schema ({
   name : String,
@@ -155,8 +171,42 @@ app.post("/login", function(req, res){
 
 });
 
+app.get('/addhotel', (req, res) => {
+  imgModel.find({}, (err, items) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('hotels', {
+        items: items
+      });
+    }
+  });
+});
 
-
+app.post('/addhotel', upload.single('image'), (req, res, next) => {
+  console.log('ok');
+  var obj = {
+    name: req.body.name,
+    desc: req.body.desc,
+    img: {
+      data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+      contentType: 'image/png'
+    }
+  }
+  fs.unlinkSync(__dirname + '/uploads/' + req.file.filename, function(err) {
+    if (err) throw err;
+    // if no error, file has been deleted successfully
+    console.log('File deleted!');
+  });
+  imgModel.create(obj, (err, item) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // item.save();
+      res.redirect('/addhotel');
+    }
+  });
+});
 
 
 
