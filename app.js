@@ -20,7 +20,7 @@ var room = require(__dirname+'/room');
 var booking = require(__dirname+'/booking');
 
 var roomRouter =require(__dirname+'/route/roomRoute')
-
+var bookingRoom = require(__dirname+'/route/bookingRoute')
 const app = express();
 
 app.use(express.static("public"));
@@ -231,5 +231,5 @@ app.get('/hotel',function(req,res){
 })
 
 app.use(roomRouter);
-
+app.use(bookingRoom);
 app.listen(process.env.PORT || 3000, function() {});
