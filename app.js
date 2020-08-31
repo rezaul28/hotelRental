@@ -13,6 +13,14 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 
+
+var imgModel = require(__dirname+'/model');
+var hotel = require(__dirname+'/hotel');
+var room = require(__dirname+'/room');
+var booking = require(__dirname+'/booking');
+
+var roomRouter =require(__dirname+'/route/roomRoute')
+var bookingRoom = require(__dirname+'/route/bookingRoute')
 const app = express();
 
 app.use(express.static("public"));
@@ -25,7 +33,7 @@ var storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now())
     }
-}); 
+});
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -47,7 +55,7 @@ mongoose.set("useCreateIndex", true);
 var upload = multer({
   storage: storage
 });
-var imgModel = require('./model');
+
 
 const userSchema = new mongoose.Schema ({
   name : String,
@@ -208,7 +216,20 @@ app.post('/addhotel', upload.single('image'), (req, res, next) => {
   });
 });
 
+app.get('/hotel',function(req,res){
+  const newHotel={
+    name : 'abc',
+    location :' def'
+  }
+  hotel.create(newHotel,(err,item ) => {
+    if(err){
+      console.log(err);
+    }else{
+      console.log('hotel');
+    }
+  })
+})
 
-
-
+app.use(roomRouter);
+app.use(bookingRoom);
 app.listen(process.env.PORT || 3000, function() {});
