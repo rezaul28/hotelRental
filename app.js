@@ -19,6 +19,8 @@ var hotel = require(__dirname+'/hotel');
 var room = require(__dirname+'/room');
 var booking = require(__dirname+'/booking');
 
+var roomRouter =require(__dirname+'/route/roomRoute')
+
 const app = express();
 
 app.use(express.static("public"));
@@ -228,24 +230,6 @@ app.get('/hotel',function(req,res){
   })
 })
 
-app.get('/room',function(req,res){
-  let ref;
-  hotel.find({name : 'abc'},function(err,item){
-    ref=item[0];
-    let obj={
-      hotal:ref,
-      price: 100
-    }
-    room.create(obj,(err,item ) => {
-      if(err){
-        console.log(err);
-      }else{
-        console.log('hotel');
-      }
-    })
-  })
-
-
-})
+app.use(roomRouter);
 
 app.listen(process.env.PORT || 3000, function() {});
