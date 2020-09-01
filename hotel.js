@@ -6,10 +6,11 @@ var hotelSchema = new mongoose.Schema({
       require : true,
       unique : true
     },
-    image : [{type : String}],
     location : {
       type : String,
       require : true
-    }
+    },
+    lat : String,
+    lang : String,
 });
 module.exports = new mongoose.model('Hotel', hotelSchema);

@@ -16,9 +16,7 @@ router.post('/booking', function(req, res) {
   if (req.isAuthenticated()) {
     completeBooking(req, res);
   } else {
-    var start = new Date("September 1, 2020 12:00:00");
-    var end = new Date("September 3, 2020 12:00:00");
-    console.log();
+    console.log('unothorized');
   }
 });
 

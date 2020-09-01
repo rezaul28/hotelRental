@@ -5,12 +5,8 @@ var roomSchema = new mongoose.Schema({
       type : mongoose.Schema.Types.ObjectId,
       ref : "Hotel"
     },
-    image : [{type : String}],
+    image : String,
     roomtype : String,
-    price : Number,
-    booking : {
-      type : mongoose.Schema.Types.ObjectId,
-      ref : "Booking"
-    }
+    price : Number
 });
 module.exports = new mongoose.model('Room', roomSchema);
