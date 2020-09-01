@@ -4,6 +4,7 @@ const express = require("express");
 var hotel = require('../hotel');
 var room = require('../room');
 
+
 const router=express.Router();
 
 router.get('/room',function(req,res){
@@ -27,7 +28,7 @@ router.get('/room',function(req,res){
 })
 
 router.post('/room',function(req,res){
-  console.log(req.isAuthenticated());
+
   res.redirect('/room')
 
 })
