@@ -11,24 +11,34 @@ router.get('/addNewRoom', function(req, res) {
   res.render('hotels')
 })
 
-router.post('/addNewRoom', imgUpload.single('image'), (req, res, next) => {
-  console.log('here first');
-  roomAdder(req, res);
+router.post('/addNewRoom',function(req,res) {
+  var photos =[];
+  imgUpload(req,res,function(err){
+    if(err){
+      console.log(err);
+    }else{
+      req.files.forEach((item, i) => {
+        photos.push(item.filename)
+      });
+      roomAdder(req,res,photos);
+      photos = [];
+    }
+  })
   res.redirect('/addNewRoom');
 })
 
-var roomAdder = function(req, res) {
+var roomAdder = function(req, res, photos) {
   var type=req.body.name;
   var costPerNight=req.body.desc;
   hotel.find({
-    name: 'abc'
+    name: 'a'
   }, function(err, item) {
     if (item.length === 0) {
       console.log('no hotel found');
     } else {
       var newRoom = {
         hotal : item[0],
-        img : req.file.filename,
+        image : photos,
         roomtype : type,
         price : costPerNight
       }

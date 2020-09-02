@@ -5,7 +5,7 @@ var roomSchema = new mongoose.Schema({
       type : mongoose.Schema.Types.ObjectId,
       ref : "Hotel"
     },
-    image : String,
+    image : [{type :String}],
     roomtype : String,
     price : Number
 });

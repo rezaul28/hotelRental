@@ -174,35 +174,35 @@ app.post("/login", function(req, res){
 
 });
 
-app.get('/addhotel', (req, res) => {
-  imgModel.find({}, (err, items) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('hotels', {
-        items: items
-      });
-    }
-  });
-});
+// app.get('/addhotel', (req, res) => {
+//   imgModel.find({}, (err, items) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.render('hotels', {
+//         items: items
+//       });
+//     }
+//   });
+// });
 
-app.post('/addhotel', imgUpload.single('image'), (req, res, next) => {
-  console.log(req.file.filename);
-
-  var obj = {
-    name: req.body.name,
-    desc: req.body.desc,
-    img : req.file.filename
-  }
-  imgModel.create(obj, (err, item) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // item.save();
-      res.redirect('/addhotel');
-    }
-  });
-});
+// app.post('/addhotel', imgUpload.single('image'), (req, res, next) => {
+//   console.log(req.file.filename);
+//
+//   var obj = {
+//     name: req.body.name,
+//     desc: req.body.desc,
+//     img : req.file.filename
+//   }
+//   imgModel.create(obj, (err, item) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       // item.save();
+//       res.redirect('/addhotel');
+//     }
+//   });
+// });
 
 app.get('/hotel',function(req,res){
   const newHotel={
