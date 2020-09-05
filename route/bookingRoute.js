@@ -5,6 +5,9 @@ var room = require('../room');
 var bookingSchema = require('../booking');
 
 const router = express.Router();
+const start = new Date("September 1, 2020");
+const end = new Date("September 3, 2020");
+
 
 router.get('/booking', function(req, res) {
   res.render('./room')
@@ -13,18 +16,40 @@ router.get('/booking', function(req, res) {
 
 
 router.post('/booking', function(req, res) {
-  if (req.isAuthenticated()) {
-    completeBooking(req, res);
-  } else {
-    console.log('unothorized');
-  }
+  bookingSchema.find({
+    room: '5f4fb405e294812021d9660b'
+  }, function(err, items) {
+    if(err){
+      console.log(err);
+    }
+    else if (items.length === 0) {
+      completeBooking(req, res);
+    } else {
+      var flag = false;
+      for (let item of items) {
+        if (item.startAt.getTime() === start.getTime() || item.endAt.getTime() === end.getTime() || (item.startAt.getTime()>start.getTime() && item.startAt.getTime()<end.getTime()) || (item.startAt.getTime()<start.getTime() && item.endAt.getTime()<end.getTime())) {
+          flag =false;
+          break;
+        } else if (item.startAt.getTime() > start.getTime() && item.startAt.getTime() > end.getTime() && item.endAt.getTime() > start.getTime() && item.endAt.getTime() > end.getTime()) {
+          flag=true;
+        } else if (item.endAt.getTime() < start.getTime() && item.endAt.getTime() < end.getTime() && item.startAt.getTime() < start.getTime() && item.startAt.getTime() < end.getTime()) {
+          flag=true;
+        }
+      }
+      if(flag){
+        completeBooking(req,res);
+      }else{
+        console.log('booked before');
+      }
+    }
+
+  });
 });
 
 
 
 var completeBooking = function(req, res) {
-  var start = new Date("September 1, 2020 12:00:00");
-  var end = new Date("September 2, 2020 12:00:00");
+
   var totalDays = Math.ceil((end - start) / 86400000);
   var totalGuests = 5;
   if (start < end) {
@@ -33,7 +58,7 @@ var completeBooking = function(req, res) {
     console.log('false');
   }
   // 5f4cc443567925113f5c21f2
-  room.findById('5f4cc443567925113f5c21f2', function(err, result) {
+  room.findById('5f4fb405e294812021d9660b', function(err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -52,6 +77,7 @@ var completeBooking = function(req, res) {
           console.log(err);
         } else {
           console.log(item);
+          console.log('new booking');
         }
       })
     }
