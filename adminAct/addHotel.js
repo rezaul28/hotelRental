@@ -7,7 +7,7 @@ var room = require('../room');
 const router = express.Router();
 
 router.get('/addNewHotel', function(req, res) {
-  res.render('hotels')
+  res.render('addHotels')
 })
 
 router.post('/addNewHotel', function(req,res){

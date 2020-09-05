@@ -24,6 +24,9 @@ var bookingRoom = require(__dirname+'/route/bookingRoute');
 var addRoom = require(__dirname+'/adminAct/addRoom');
 var addhotel = require(__dirname+'/adminAct/addHotel');
 
+var findHotel = require(__dirname+'/finder/hotelFinder')
+var findRoom = require(__dirname+'/finder/roomFinder')
+
 var imgUpload = require(__dirname+'/fileSaver/imgSaver');
 const app = express();
 
@@ -174,53 +177,11 @@ app.post("/login", function(req, res){
 
 });
 
-app.get('/addhotel', (req, res) => {
-  imgModel.find({}, (err, items) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('hotels', {
-        items: items
-      });
-    }
-  });
-});
-
-app.post('/addhotel', imgUpload.single('image'), (req, res, next) => {
-  console.log(req.file.filename);
-
-  var obj = {
-    name: req.body.name,
-    desc: req.body.desc,
-    img : req.file.filename
-  }
-  imgModel.create(obj, (err, item) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // item.save();
-      res.redirect('/addhotel');
-    }
-  });
-});
-
-app.get('/hotel',function(req,res){
-  const newHotel={
-    name : 'abc',
-    location :' def'
-  }
-  hotel.create(newHotel,(err,item ) => {
-    if(err){
-      console.log(err);
-    }else{
-      console.log('hotel');
-    }
-  })
-})
-
 app.use(roomRouter);
 app.use(bookingRoom);
 app.use(addRoom);
 app.use(addhotel);
+app.use(findHotel);
+app.use(findRoom);
 
 app.listen(process.env.PORT || 3000, function() {});
