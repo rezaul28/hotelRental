@@ -5,8 +5,8 @@ var room = require('../room');
 var bookingSchema = require('../booking');
 
 const router = express.Router();
-const start = new Date("September 1, 2020");
-const end = new Date("September 3, 2020");
+const start = new Date("October 1, 2020");
+const end = new Date("October 3, 2020");
 
 
 router.get('/booking', function(req, res) {
@@ -19,6 +19,7 @@ router.post('/booking', function(req, res) {
   bookingSchema.find({
     room: '5f4fb405e294812021d9660b'
   }, function(err, items) {
+    console.log(items);
     if(err){
       console.log(err);
     }
