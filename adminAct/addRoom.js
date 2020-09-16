@@ -29,7 +29,7 @@ router.post('/addNewRoom',function(req,res) {
 
 var roomAdder = function(req, res, photos) {
   var type=req.body.name;
-  var costPerNight=req.body.desc;
+  var costPerNight=req.body.price;
   hotel.find({
     name: 'a'
   }, function(err, item) {
