@@ -5,8 +5,8 @@ var room = require('../room');
 var bookingSchema = require('../booking');
 
 const router = express.Router();
-const start = new Date("September 1, 2020");
-const end = new Date("September 3, 2020");
+const start = new Date("October 1, 2020");
+const end = new Date("October 3, 2020");
 
 
 router.get('/booking', function(req, res) {
@@ -16,26 +16,30 @@ router.get('/booking', function(req, res) {
 
 
 router.post('/booking', function(req, res) {
+  console.log(req.body);
   bookingSchema.find({
     room: '5f4fb405e294812021d9660b'
   }, function(err, items) {
+    console.log(items);
     if(err){
       console.log(err);
     }
     else if (items.length === 0) {
       completeBooking(req, res);
     } else {
-      var flag = false;
-      for (let item of items) {
-        if (item.startAt.getTime() === start.getTime() || item.endAt.getTime() === end.getTime() || (item.startAt.getTime()>start.getTime() && item.startAt.getTime()<end.getTime()) || (item.startAt.getTime()<start.getTime() && item.endAt.getTime()<end.getTime())) {
-          flag =false;
-          break;
-        } else if (item.startAt.getTime() > start.getTime() && item.startAt.getTime() > end.getTime() && item.endAt.getTime() > start.getTime() && item.endAt.getTime() > end.getTime()) {
-          flag=true;
-        } else if (item.endAt.getTime() < start.getTime() && item.endAt.getTime() < end.getTime() && item.startAt.getTime() < start.getTime() && item.startAt.getTime() < end.getTime()) {
-          flag=true;
-        }
-      }
+      var flag = true;
+      // for (let item of items) {
+      //   if (item.startAt.getTime() === start.getTime() || item.endAt.getTime() === end.getTime() || (item.startAt.getTime()>start.getTime() && item.startAt.getTime()<end.getTime()) || (item.startAt.getTime()<start.getTime() && item.endAt.getTime()<end.getTime())) {
+      //     console.log(item.startAt.getTime()+" "+start.getTime());
+      //     console.log(item.endAt.getTime()+" "+end.getTime());
+      //     flag =false;
+      //     break;
+      //   } else if (item.startAt.getTime() > start.getTime() && item.startAt.getTime() > end.getTime() && item.endAt.getTime() > start.getTime() && item.endAt.getTime() > end.getTime()) {
+      //     flag=true;
+      //   } else if (item.endAt.getTime() < start.getTime() && item.endAt.getTime() < end.getTime() && item.startAt.getTime() < start.getTime() && item.startAt.getTime() < end.getTime()) {
+      //     flag=true;
+      //   }
+      // }
       if(flag){
         completeBooking(req,res);
       }else{
@@ -50,8 +54,8 @@ router.post('/booking', function(req, res) {
 
 var completeBooking = function(req, res) {
 
-  var totalDays = Math.ceil((end - start) / 86400000);
-  var totalGuests = 5;
+  var totalDays = Math.ceil((req.body.end - req.body.start) / 86400000);
+  var totalGuests = 1;
   if (start < end) {
     console.log('true');
   } else {
@@ -64,11 +68,11 @@ var completeBooking = function(req, res) {
     } else {
       console.log(result);
       var newBooking = {
-        endAt: end,
-        startAt: start,
-        totalPrice: (result.price * totalDays),
-        days: totalDays,
-        guests: totalGuests,
+        endAt: req.body.end,
+        startAt: req.body.start,
+        totalPrice: (result.price * req.body.totalDays),
+        days: req.body.totalDays,
+        guests: req.body.totalGuests,
         user: req.user,
         room: result
       }
