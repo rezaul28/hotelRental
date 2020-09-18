@@ -49,6 +49,7 @@ app.use(passport.session());
 
 mongoose.connect('mongodb+srv://reza:105796@cluster0.ywkip.mongodb.net/userInfoDB', {
   useNewUrlParser: true,
+   useUnifiedTopology: true
   //useUnifiedTopology: true
 });
 mongoose.set("useCreateIndex", true);
@@ -175,7 +176,7 @@ app.post("/login", function(req, res){
   });
 
 });
-
+app.use("/uploads/images",express.static(path.join('uploads','images')));
 app.use(roomRouter);
 app.use(bookingRoom);
 app.use(addRoom);

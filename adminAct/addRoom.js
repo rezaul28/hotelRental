@@ -18,7 +18,7 @@ router.post('/addNewRoom',function(req,res) {
       console.log(err);
     }else{
       req.files.forEach((item, i) => {
-        photos.push(item.filename)
+        photos.push(item.path)
       });
       roomAdder(req,res,photos);
       photos = [];
